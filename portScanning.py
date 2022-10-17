@@ -9,7 +9,7 @@ import sys
 
 def portScanning(ip):
     try:
-        ports=[80,443,3306,5000]
+        ports=[80,443,3306,5000,8090]
         for i in ports:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             socket.setdefaulttimeout(1)     
@@ -20,6 +20,8 @@ def portScanning(ip):
                 return
             if response == 0:
                 print("Port ", i ," is open")
+            else:
+                print("Port ", i ," is closed")
             sock.close()
     except KeyboardInterrupt:
         print("\n Quiting Scanning !!!!")
@@ -51,9 +53,13 @@ elif choice==2:
 elif choice==3: 
     subnetId= input("Enter the subnet id: ")
     net4 = ipaddress.ip_network(subnetId)
-    for ip in net4.hosts:
-        print("Scanning "+ ip)
-        portScanning(ip)
+    j=1
+    for ip in net4.hosts():
+        print("Scanning "+ str(ip))
+        portScanning(str(ip))
+        j=j+1
+        if j==3:
+            break
 elif choice==4: 
     hostName= input("Enter the host name ")
     ip = socket.gethostbyname(hostName)
